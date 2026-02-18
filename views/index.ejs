@@ -25,7 +25,10 @@
                cat === 'birthday' ? 'Forgot Birthday' :
                cat === 'gym' ? 'Skipped Gym' :
                cat === 'homework' ? 'No Homework' :
-               cat === 'meeting' ? 'Missed Meeting' : cat %>
+               cat === 'meeting' ? 'Missed Meeting' :
+               cat === 'deploy' ? 'Broke the Deploy' :
+               cat === 'standup' ? 'Late to Standup' :
+               cat === 'pr' ? 'PR Not Reviewed' : cat %>
           </button>
         <% }); %>
       </div>

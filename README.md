@@ -36,12 +36,12 @@ Excuses are assembled from four fragment arrays in `lib/excuses.js`:
 
 | Fragment    | Count | Example                                        |
 |-------------|-------|------------------------------------------------|
-| Openers     | 5 per category (30 total) | "I was bang on schedule until"    |
-| Villains    | 10    | "a gang of foxes in tiny waistcoats"           |
-| Actions     | 10    | "replaced my trainers with crumpets"           |
-| Resolutions | 10    | "and long story short, I now own a goat called Gerald." |
+| Openers     | 5 per category (45 total) | "I was bang on schedule until"    |
+| Villains    | 15    | "a gang of foxes in tiny waistcoats"           |
+| Actions     | 15    | "deployed a config change to prod at 4:59 on Friday" |
+| Resolutions | 15    | "and long story short, I now own a goat called Gerald." |
 
-This gives **5,000 unique excuses per category** (30,000 total across all 6 categories).
+This gives **16,875 unique excuses per category** (151,875 total across all 9 categories).
 
 ### Categories
 
@@ -53,6 +53,9 @@ This gives **5,000 unique excuses per category** (30,000 total across all 6 cate
 | `gym`      | Skipped Gym     |
 | `homework` | No Homework     |
 | `meeting`  | Missed Meeting  |
+| `deploy`   | Broke the Deploy |
+| `standup`  | Late to Standup  |
+| `pr`       | PR Not Reviewed  |
 
 ### Adding a new category
 
