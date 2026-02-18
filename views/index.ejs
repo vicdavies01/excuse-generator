@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Excuse Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <nav class="nav">Home</nav>
+  <div class="container">
+    <h1>The Excuse Generator</h1>
+    <p class="subtitle">Because the truth is boring.</p>
+
+    <div class="categories">
+      <h2>What do you need an excuse for?</h2>
+      <div class="buttons">
+        <% categories.forEach(function(cat) { %>
+          <button type="button" class="cat-btn" data-category="<%= cat %>" onclick="getExcuse('<%= cat %>')">
+            <%= cat === 'late' ? 'Late to Work' :
+               cat === 'deadline' ? 'Missed Deadline' :
+               cat === 'birthday' ? 'Forgot Birthday' :
+               cat === 'gym' ? 'Skipped Gym' :
+               cat === 'homework' ? 'No Homework' :
+               cat === 'meeting' ? 'Missed Meeting' : cat %>
+          </button>
+        <% }); %>
+      </div>
+    </div>
+
+    <div id="loading" class="loading-box" style="display:none">
+      <div class="spinner"></div>
+      <p class="loading-text" id="loading-text">Consulting the excuse department...</p>
+    </div>
+
+    <div id="result" class="excuse-box" style="display:none">
+      <h2>Your Excuse</h2>
+      <p class="excuse-text" id="excuse-text"></p>
+      <div class="excuse-footer">
+        <button class="copy-btn" onclick="copyExcuse()">Copy to Clipboard</button>
+      </div>
+      <p class="tip">Pro tip: Maintain eye contact while delivering for maximum believability.</p>
+    </div>
+  </div>
+
+  <script>
+    const loadingMessages = [
+      "Consulting the excuse department...",
+      "Interviewing fictional witnesses...",
+      "Fabricating supporting evidence...",
+      "Checking if this one's been used before...",
+      "Running it past the believability committee...",
+      "Adding dramatic flair...",
+      "Almost done, just bribing the fact-checkers...",
+    ];
+
+    async function getExcuse(category) {
+      const loading = document.getElementById('loading');
+      const result = document.getElementById('result');
+      const loadingText = document.getElementById('loading-text');
+
+      // highlight active button
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector(`[data-category="${category}"]`).classList.add('active');
+
+      // show loading, hide previous result
+      result.style.display = 'none';
+      loading.style.display = 'block';
+
+      // cycle through funny loading messages
+      let msgIndex = 0;
+      loadingText.textContent = loadingMessages[0];
+      const msgInterval = setInterval(() => {
+        msgIndex = (msgIndex + 1) % loadingMessages.length;
+        loadingText.textContent = loadingMessages[msgIndex];
+      }, 500);
+
+      // fetch the excuse immediately but wait at least 2.5s for the drama
+      const [response] = await Promise.all([
+        fetch(`/api/excuse/${category}`),
+        new Promise(r => setTimeout(r, 2500)),
+      ]);
+      const data = await response.json();
+
+      clearInterval(msgInterval);
+
+      // reveal the excuse
+      loading.style.display = 'none';
+      document.getElementById('excuse-text').textContent = data.excuse;
+      result.style.display = 'block';
+    }
+
+    function copyExcuse() {
+      const text = document.getElementById('excuse-text').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = 'Copy to Clipboard'; }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>
